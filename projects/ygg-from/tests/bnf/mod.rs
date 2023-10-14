@@ -1,9 +1,15 @@
+use url::Url;
+use yggdrasil_from::BNFConverter;
 use super::*;
 
 #[test]
-pub fn test() -> std::io::Result<()> {
-    let cvt = PestConverter::default();
-    let out = cvt.parse_pest(include_str!("bnf.bnf"));
-    let mut file = File::create("tests/bnf/bnf-raw.ygg")?;
-    file.write_all(out.as_bytes())
+pub fn test() -> anyhow::Result<()> {
+    let cvt = BNFConverter::default();
+    let out = cvt.convert_bnf(include_str!("bnf.bnf"));
+    let path = Path::new("tests/bnf/bnf-raw.ygg").canonicalize()?;
+    println!("{}", Url::from_file_path(&path).unwrap());
+    let mut file = File::create(&path)?;
+    file.write_all(out.as_bytes())?;
+
+    Ok(())
 }

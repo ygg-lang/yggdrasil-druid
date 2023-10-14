@@ -9,6 +9,8 @@ license = "MPL-2.0"
 edition = "2018"
 
 [dependencies]
+anyhow = "1.0.75"
+url = "2.4.1"
 bnf = "0.5.0"
 abnf = "0.13.0"
 ebnf = "0.1.4"
@@ -16,6 +18,7 @@ lrlex = "0.13.3"
 lrpar = "0.13.3"
 convert_case = "0.6.0"
 antlr-rust = "0.3.0-beta"
+
 
 [dependencies.pest_meta]
 version = "2.7.4"

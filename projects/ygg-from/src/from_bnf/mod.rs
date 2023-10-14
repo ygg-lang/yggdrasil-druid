@@ -7,7 +7,7 @@ use pest_meta::parse_and_optimize;
 use yggdrasil_ir::grammar::GrammarInfo;
 use yggdrasil_ir::rule::GrammarRule;
 use crate::utils::Buffer;
-use bnf::Grammar;
+use bnf::{Expression, Grammar, Production, Term};
 
 pub struct BNFConverter {}
 
@@ -19,124 +19,50 @@ impl Default for BNFConverter {
 }
 
 impl BNFConverter {
-    pub fn parse_pest(&self, text: &str) -> String {
-        match text.parse() {
-            Ok(g) => println!("{:#?}", g),
-            Err(e) => println!("Failed to make grammar from String: {}", e),
-        }
-        let (_, rules) = parse_and_optimize(text).unwrap();
+    pub fn convert_bnf(&self, text: &str) -> anyhow::Result<String> {
+        let grammar = text.parse::<Grammar>()?;
         let mut buffer = Buffer::new(self);
-        for rule in rules {
-            rule.build_ygg(&mut buffer).unwrap();
+        for rule in grammar.productions_iter() {
+            rule.build_ygg(&mut buffer)?;
         }
-        buffer.finish()
+        Ok(buffer.finish())
     }
 }
 
-trait FromPest {
+trait FromBNF {
     fn build_ygg(&self, f: &mut Buffer<BNFConverter>) -> std::fmt::Result;
     fn is_single(&self) -> bool {
         false
     }
 }
 
-impl<'i> FromPest for OptimizedRule {
+impl<'i> FromBNF for Production {
     fn build_ygg(&self, f: &mut Buffer<BNFConverter>) -> std::fmt::Result {
-        match self.ty {
-            RuleType::Atomic => {
-                f.write_str("atomic ")?
+        f.write_str("class ")?;
+        match &self.lhs {
+            Term::Terminal(v) => {
+                f.write_str(&v.to_case(Case::Pascal))?
             }
-            RuleType::CompoundAtomic => {
-                f.write_str("atomic ")?
-            }
-            RuleType::Silent => {
-                f.write_str("ignore ")?
-            }
-            _ => {}
+            Term::Nonterminal(v) => { f.write_str(&v.to_case(Case::Pascal))? }
         };
-        writeln!(f, "class {} {{", self.name.to_case(Case::Pascal))?;
-        self.expr.build_ygg(f)?;
+        f.write_str(" {\n")?;
+        for x in self.rhs_iter() {
+            x.build_ygg(f)?;
+        }
         f.write_str("}\n")
     }
 }
 
-impl<'i> FromPest for OptimizedExpr {
+impl<'i> FromBNF for Expression {
     fn build_ygg(&self, f: &mut Buffer<BNFConverter>) -> std::fmt::Result {
-        match self {
-            OptimizedExpr::Str(s) => {
-                writeln!(f, " {:?}", s)?
-            }
-            OptimizedExpr::Insens(s) => {
-                writeln!(f, " @insensitive({:?})", s)?
-            }
-            OptimizedExpr::Range(min, max) => {
-                writeln!(f, " [{min}-{max}]")?
-            }
-            OptimizedExpr::Ident(s) => {
-                writeln!(f, " {}", s.to_case(Case::Pascal))?
-            }
-            OptimizedExpr::PeekSlice(a, b) => {
-                writeln!(f, "@peek({}, {})", a, b.unwrap_or(i32::MAX))?
-            }
-            OptimizedExpr::PosPred(a) => {
-                f.write_str("&(")?;
-                a.build_ygg(f)?;
-                f.write_str(")")?;
-            }
-            OptimizedExpr::NegPred(a) => {
-                f.write_str("!(")?;
-                a.build_ygg(f)?;
-                f.write_str(")")?;
-            }
-            OptimizedExpr::Seq(a, b) => {
-                a.build_ygg(f)?;
-                b.build_ygg(f)?;
-            }
-            OptimizedExpr::Choice(a, b) => {
-                a.build_ygg(f)?;
-                f.write_str(" | ")?;
-                b.build_ygg(f)?;
-            }
-            OptimizedExpr::Opt(a) => {
-                f.write_str("(")?;
-                a.build_ygg(f)?;
-                f.write_str(")?")?;
-            }
-            OptimizedExpr::Rep(a) => {
-                f.write_str("(")?;
-                a.build_ygg(f)?;
-                f.write_str(")*")?;
-            }
-            OptimizedExpr::RepOnce(a) => {
-                f.write_str("(")?;
-                a.build_ygg(f)?;
-                f.write_str(")+")?;
-            }
-            OptimizedExpr::Skip(a) => {
-                f.write_str("@skip(")?;
-                for (index, skip) in a.iter().enumerate() {
-                    if index != 0 {
-                        f.write_str(", ")?;
-                    }
-                    f.write_str(skip)?;
+        for x in self.terms_iter() {
+            match x {
+                Term::Terminal(v) => {
+                    write!(f, " {:?}", v.to_case(Case::Pascal))?
                 }
-                f.write_str(")")?
-            }
-            OptimizedExpr::Push(a) => {
-                f.write_str("@push(")?;
-                a.build_ygg(f)?;
-                f.write_str(")")?
-            }
-            OptimizedExpr::NodeTag(a, b) => {
-                f.write_str(b)?;
-                f.write_str(":(")?;
-                a.build_ygg(f)?;
-                f.write_str(")")?;
-            }
-            OptimizedExpr::RestoreOnErr(a) => {
-                f.write_str("@restore(")?;
-                a.build_ygg(f)?;
-                f.write_str(")")?
+                Term::Nonterminal(v) => {
+                    write!(f, " {}", v.to_case(Case::Pascal))?
+                }
             }
         }
         Ok(())
