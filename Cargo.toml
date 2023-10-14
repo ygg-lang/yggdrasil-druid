@@ -1,7 +1,8 @@
 [workspace]
+resolver = "2"
 members = ["projects/*"]
 default-members = [
-    "projects/sub_projects",
+    "projects/ygg-from",
 ]
 exclude = [
     "projects/.DS_Store",

@@ -8,6 +8,8 @@ use yggdrasil_ir::{ChoiceExpression, ConcatExpression, DataKind, ExpressionNode,
 
 pub struct PestConverter {}
 
+
+
 trait FromPest {
     fn build_ygg(&self, f: impl Write, soft: bool) -> std::fmt::Result {
         let _ = soft;
@@ -16,11 +18,6 @@ trait FromPest {
     }
 }
 
-#[test]
-pub fn test() {
-    let cvt = PestConverter::default();
-    cvt.parse_pest(include_str!("../../tests/pest.pest"));
-}
 
 impl Default for PestConverter {
     fn default() -> Self {
@@ -29,7 +26,7 @@ impl Default for PestConverter {
 }
 
 impl PestConverter {
-    fn parse_pest(&self, text: &str) -> GrammarInfo {
+    pub fn parse_pest(&self, text: &str) -> GrammarInfo {
         let (_, rules) = parse_and_optimize(text).unwrap();
         let mut info = GrammarInfo::default();
         for (index, rule) in rules.iter().enumerate() {
@@ -81,8 +78,7 @@ impl PestConverter {
             OptimizedExpr::Seq(l, r) => {
                 if atomic {
                     self.visit_expr(l, atomic) & self.visit_expr(r, atomic)
-                }
-                else {
+                } else {
                     self.visit_expr(l, atomic) + self.visit_expr(r, atomic)
                 }
             }
