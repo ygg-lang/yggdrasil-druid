@@ -1,4 +1,5 @@
 use std::fmt::{Debug, Write};
+use convert_case::{Case, Casing};
 
 use pest_meta::ast::RuleType;
 use pest_meta::optimizer::{OptimizedExpr, OptimizedRule};
@@ -29,12 +30,15 @@ impl PestConverter {
 }
 
 trait FromPest {
-    fn build_ygg(&self,  f: &mut Buffer<PestConverter>) -> std::fmt::Result;
+    fn build_ygg(&self, f: &mut Buffer<PestConverter>) -> std::fmt::Result;
+    fn is_single(&self) -> bool {
+        false
+    }
 }
 
 impl<'i> FromPest for OptimizedRule {
     fn build_ygg(&self, f: &mut Buffer<PestConverter>) -> std::fmt::Result {
-        let atomic = match self.ty {
+        match self.ty {
             RuleType::Atomic => {
                 f.write_str("atomic ")?
             }
@@ -46,123 +50,91 @@ impl<'i> FromPest for OptimizedRule {
             }
             _ => {}
         };
-        writeln!(f, "class {} {{", self.name.clone())?;
-
+        writeln!(f, "class {} {{", self.name.to_case(Case::Pascal))?;
+        self.expr.build_ygg(f)?;
         f.write_str("}\n")
     }
 }
 
-// impl PestConverter {
-//     fn visit_rule(&self, rule: &OptimizedRule, index: usize) -> GrammarRule {
-//         let name = rule.name.clone();
-//         let entry = index == 0;
-//         let atomic = match rule.ty {
-//             RuleType::Atomic => { true }
-//             RuleType::CompoundAtomic => { true }
-//             _ => false
-//         };
-//         let body = self.visit_expr(&rule.expr, atomic);
-//     }
-//     fn visit_expr(&self, expr: &OptimizedExpr, atomic: bool) -> ExpressionNode {
-//         match expr {
-//             OptimizedExpr::Str(s) => {
-//                 DataKind::String(s.to_owned()).into()
-//             }
-//             OptimizedExpr::Insens(_) => { unreachable!() }
-//             OptimizedExpr::Range(_, _) => { unreachable!() }
-//             OptimizedExpr::Ident(v) => {
-//                 RuleReference::new(v).to_node("")
-//             }
-//             OptimizedExpr::PeekSlice(_, _) => { unreachable!() }
-//             OptimizedExpr::PosPred(_) => { unreachable!() }
-//             OptimizedExpr::NegPred(_) => { unreachable!() }
-//             OptimizedExpr::Seq(l, r) => {
-//                 if atomic {
-//                     self.visit_expr(l, atomic) & self.visit_expr(r, atomic)
-//                 } else {
-//                     self.visit_expr(l, atomic) + self.visit_expr(r, atomic)
-//                 }
-//             }
-//             OptimizedExpr::Choice(l, r) => {
-//                 self.visit_expr(l, atomic) | self.visit_expr(r, atomic)
-//             }
-//             OptimizedExpr::Opt(v) => { self.visit_expr(v, atomic) + Operator::Optional }
-//             OptimizedExpr::Rep(v) => {
-//                 self.visit_expr(v, atomic) + Operator::Repeats
-//             }
-//             OptimizedExpr::Skip(_) => { unreachable!() }
-//             OptimizedExpr::Push(_) => { unreachable!() }
-//             OptimizedExpr::RestoreOnErr(_) => { unreachable!() }
-//         }
-//     }
-// }
-
-// impl FromPest for Rule {
-//     fn build_ygg(&self, f: impl Write, _: bool) -> std::fmt::Result {
-//         let mut soft_concat = false;
-//         let kind = match self.ty {
-//             RuleType::Normal => {
-//                 soft_concat = true;
-//                 ""
-//             }
-//             RuleType::Silent => {
-//                 soft_concat = true;
-//                 "_"
-//             }
-//             RuleType::Atomic => { "" }
-//             RuleType::CompoundAtomic => { "" }
-//             RuleType::NonAtomic => {
-//                 soft_concat = true;
-//                 ""
-//             }
-//         };
-//         write!(f, "{name} {kind}= ", name = self.name, kind = kind)?;
-//         FromPest::build_ygg(&self.expr, f, soft_concat);
-//         write!(f, ";")
-//     }
-// }
-//
-// impl FromPest for Expr {
-//     fn build_ygg(&self, f: impl Write, soft: bool) -> std::fmt::Result {
-//         match self {
-//             Expr::Str(s) => {
-//                 f.write_str(s)
-//             }
-//             Expr::Insens(s) => {
-//                 write!(f, "/{}/i", s)
-//             }
-//             Expr::Range(a, b) => {
-//                 write!(f, "[{}-{}]", a, b)
-//             }
-//             Expr::Ident(v) => {
-//                 f.write_str(v)
-//             }
-//             Expr::PeekSlice(a, b) => {write!(f, "unimplemented!")}
-//             Expr::PosPred(a) => {write!(f, "unimplemented!")}
-//             Expr::NegPred(a) => {write!(f, "unimplemented!")}
-//             Expr::Seq(a, b) => {
-//                 a.build_ygg(f, soft)?
-//             }
-//             Expr::Choice(a, b) => {write!(f, "unimplemented!")}
-//             Expr::Opt(a) => {write!(f, "unimplemented!")}
-//             Expr::Rep(a) => {write!(f, "unimplemented!")}
-//             Expr::RepOnce(a) => {write!(f, "unimplemented!")}
-//             Expr::RepExact(a, b) => {write!(f, "unimplemented!")}
-//             Expr::RepMin(a, b) => {write!(f, "unimplemented!")}
-//             Expr::RepMax(a, b) => {write!(f, "unimplemented!")}
-//             Expr::RepMinMax(e, a, b) => {
-//                 e.build_ygg(f,soft)?;
-//                 write!(f, "{{{},{}}}", a,b )
-//             }
-//             Expr::Skip(a) => {
-//                 write!(f, "unimplemented!")
-//             }
-//             Expr::Push(push) => {
-//                 write!(f, "@push(")?;
-//                 push.build_ygg(f, soft)?;
-//                 write!(f, ")")?
-//             }
-//         }
-//         Ok(())
-//     }
-// }
+impl<'i> FromPest for OptimizedExpr {
+    fn build_ygg(&self, f: &mut Buffer<PestConverter>) -> std::fmt::Result {
+        match self {
+            OptimizedExpr::Str(s) => {
+                writeln!(f, " {:?}", s)?
+            }
+            OptimizedExpr::Insens(s) => {
+                writeln!(f, " @insensitive({:?})", s)?
+            }
+            OptimizedExpr::Range(min, max) => {
+                writeln!(f, " [{min}-{max}]")?
+            }
+            OptimizedExpr::Ident(s) => {
+                writeln!(f, " {}", s.to_case(Case::Pascal))?
+            }
+            OptimizedExpr::PeekSlice(a, b) => {
+                writeln!(f, "@peek({}, {})", a, b.unwrap_or(i32::MAX))?
+            }
+            OptimizedExpr::PosPred(a) => {
+                f.write_str("&(")?;
+                a.build_ygg(f)?;
+                f.write_str(")")?;
+            }
+            OptimizedExpr::NegPred(a) => {
+                f.write_str("!(")?;
+                a.build_ygg(f)?;
+                f.write_str(")")?;
+            }
+            OptimizedExpr::Seq(a, b) => {
+                a.build_ygg(f)?;
+                b.build_ygg(f)?;
+            }
+            OptimizedExpr::Choice(a, b) => {
+                a.build_ygg(f)?;
+                f.write_str(" | ")?;
+                b.build_ygg(f)?;
+            }
+            OptimizedExpr::Opt(a) => {
+                f.write_str("(")?;
+                a.build_ygg(f)?;
+                f.write_str(")?")?;
+            }
+            OptimizedExpr::Rep(a) => {
+                f.write_str("(")?;
+                a.build_ygg(f)?;
+                f.write_str(")*")?;
+            }
+            OptimizedExpr::RepOnce(a) => {
+                f.write_str("(")?;
+                a.build_ygg(f)?;
+                f.write_str(")+")?;
+            }
+            OptimizedExpr::Skip(a) => {
+                f.write_str("@skip(")?;
+                for (index, skip) in a.iter().enumerate() {
+                    if index != 0 {
+                        f.write_str(", ")?;
+                    }
+                    f.write_str(skip)?;
+                }
+                f.write_str(")")?
+            }
+            OptimizedExpr::Push(a) => {
+                f.write_str("@push(")?;
+                a.build_ygg(f)?;
+                f.write_str(")")?
+            }
+            OptimizedExpr::NodeTag(a, b) => {
+                f.write_str(b)?;
+                f.write_str(":(")?;
+                a.build_ygg(f)?;
+                f.write_str(")")?;
+            }
+            OptimizedExpr::RestoreOnErr(a) => {
+                f.write_str("@restore(")?;
+                a.build_ygg(f)?;
+                f.write_str(")")?
+            }
+        }
+        Ok(())
+    }
+}

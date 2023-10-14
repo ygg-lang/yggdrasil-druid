@@ -10,9 +10,11 @@ edition = "2018"
 
 [dependencies]
 convert_case = "0.6.0"
-pest_meta = "2.5.0"
 antlr-rust = "0.3.0-beta"
-anyhow = "1.0.66"
+
+[dependencies.pest_meta]
+version = "2.7.4"
+features = ["grammar-extras"]
 
 [dependencies.yggdrasil-ir]
 #path = "../ygg-ir"
