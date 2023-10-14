@@ -7,38 +7,20 @@ use pest_meta::parse_and_optimize;
 use yggdrasil_ir::grammar::GrammarInfo;
 use yggdrasil_ir::rule::GrammarRule;
 use crate::utils::Buffer;
+use bnf::Grammar;
+
+pub struct BNFConverter {}
 
 
-pub struct PestConverter {}
-
-
-impl Default for PestConverter {
+impl Default for BNFConverter {
     fn default() -> Self {
         Self {}
     }
 }
 
-impl PestConverter {
+impl BNFConverter {
     pub fn parse_pest(&self, text: &str) -> String {
-        use bnf::Grammar;
-
-        let input =
-            "<postal-address> ::= <name-part> <street-address> <zip-part>
-
-        <name-part> ::= <personal-part> <last-name> <opt-suffix-part> <EOL>
-                        | <personal-part> <name-part>
-
-    <personal-part> ::= <initial> '.' | <first-name>
-
-    <street-address> ::= <house-num> <street-name> <opt-apt-num> <EOL>
-
-        <zip-part> ::= <town-name> ',' <state-code> <ZIP-code> <EOL>
-
-    <opt-suffix-part> ::= 'Sr.' | 'Jr.' | <roman-numeral> | ''
-        <opt-apt-num> ::= <apt-num> | ''";
-
-        let grammar: Result<Grammar, _> = input.parse();
-        match grammar {
+        match text.parse() {
             Ok(g) => println!("{:#?}", g),
             Err(e) => println!("Failed to make grammar from String: {}", e),
         }
@@ -52,14 +34,14 @@ impl PestConverter {
 }
 
 trait FromPest {
-    fn build_ygg(&self, f: &mut Buffer<PestConverter>) -> std::fmt::Result;
+    fn build_ygg(&self, f: &mut Buffer<BNFConverter>) -> std::fmt::Result;
     fn is_single(&self) -> bool {
         false
     }
 }
 
 impl<'i> FromPest for OptimizedRule {
-    fn build_ygg(&self, f: &mut Buffer<PestConverter>) -> std::fmt::Result {
+    fn build_ygg(&self, f: &mut Buffer<BNFConverter>) -> std::fmt::Result {
         match self.ty {
             RuleType::Atomic => {
                 f.write_str("atomic ")?
@@ -79,7 +61,7 @@ impl<'i> FromPest for OptimizedRule {
 }
 
 impl<'i> FromPest for OptimizedExpr {
-    fn build_ygg(&self, f: &mut Buffer<PestConverter>) -> std::fmt::Result {
+    fn build_ygg(&self, f: &mut Buffer<BNFConverter>) -> std::fmt::Result {
         match self {
             OptimizedExpr::Str(s) => {
                 writeln!(f, " {:?}", s)?
