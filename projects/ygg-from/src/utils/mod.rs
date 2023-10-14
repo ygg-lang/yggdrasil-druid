@@ -16,7 +16,7 @@ impl<'i, C> Write for Buffer<'i, C> {
         self.buffer.write_fmt(args)
     }
 }impl<'i, C> Buffer<'i, C> {
-    pub fn new(config: &C) -> Self {
+    pub fn new(config: &'i C) -> Self {
         Self {
             buffer: "".to_string(),
             config,

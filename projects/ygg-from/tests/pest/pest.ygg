@@ -1,0 +1,114 @@
+ignore class grammar_rules {
+}
+class grammar_rule {
+}
+class assignment_operator {
+}
+class opening_brace {
+}
+class closing_brace {
+}
+class opening_paren {
+}
+class closing_paren {
+}
+class opening_brack {
+}
+class closing_brack {
+}
+ignore class modifier {
+}
+class silent_modifier {
+}
+class atomic_modifier {
+}
+class compound_atomic_modifier {
+}
+class non_atomic_modifier {
+}
+class expression {
+}
+class term {
+}
+ignore class node {
+}
+ignore class terminal {
+}
+ignore class prefix_operator {
+}
+ignore class infix_operator {
+}
+ignore class postfix_operator {
+}
+class positive_predicate_operator {
+}
+class negative_predicate_operator {
+}
+class sequence_operator {
+}
+class choice_operator {
+}
+class optional_operator {
+}
+class repeat_operator {
+}
+class repeat_once_operator {
+}
+class repeat_exact {
+}
+class repeat_min {
+}
+class repeat_max {
+}
+class repeat_min_max {
+}
+atomic class number {
+}
+atomic class integer {
+}
+class comma {
+}
+class _push {
+}
+class peek_slice {
+}
+atomic class identifier {
+}
+ignore class alpha {
+}
+ignore class alpha_num {
+}
+atomic class string {
+}
+class insensitive_string {
+}
+class range {
+}
+atomic class character {
+}
+atomic class inner_str {
+}
+atomic class inner_chr {
+}
+atomic class escape {
+}
+atomic class code {
+}
+atomic class unicode {
+}
+atomic class hex_digit {
+}
+class quote {
+}
+class single_quote {
+}
+class range_operator {
+}
+ignore class newline {
+}
+ignore class WHITESPACE {
+}
+ignore class block_comment {
+}
+ignore class COMMENT {
+}

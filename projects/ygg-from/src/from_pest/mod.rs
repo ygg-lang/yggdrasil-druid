@@ -3,20 +3,12 @@ use std::fmt::{Debug, Write};
 use pest_meta::ast::RuleType;
 use pest_meta::optimizer::{OptimizedExpr, OptimizedRule};
 use pest_meta::parse_and_optimize;
+use yggdrasil_ir::grammar::GrammarInfo;
+use yggdrasil_ir::rule::GrammarRule;
+use crate::utils::Buffer;
 
-use yggdrasil_ir::{ChoiceExpression, ConcatExpression, DataKind, ExpressionNode, GrammarInfo, GrammarRule, Operator, RuleReference};
 
 pub struct PestConverter {}
-
-
-
-trait FromPest {
-    fn build_ygg(&self, f: impl Write, soft: bool) -> std::fmt::Result {
-        let _ = soft;
-        let _ = f;
-        unimplemented!()
-    }
-}
 
 
 impl Default for PestConverter {
@@ -26,75 +18,84 @@ impl Default for PestConverter {
 }
 
 impl PestConverter {
-    pub fn parse_pest(&self, text: &str) -> GrammarInfo {
+    pub fn parse_pest(&self, text: &str) -> String {
         let (_, rules) = parse_and_optimize(text).unwrap();
-        let mut info = GrammarInfo::default();
-        for (index, rule) in rules.iter().enumerate() {
-            let out = self.visit_rule(rule, index);
-            info.rules.insert(out.name.clone(), out);
+        let mut buffer = Buffer::new(self);
+        for rule in rules {
+            rule.build_ygg(&mut buffer).unwrap();
         }
-        return info;
+        buffer.finish()
     }
 }
 
-impl PestConverter {
-    fn visit_rule(&self, rule: &OptimizedRule, index: usize) -> GrammarRule {
-        let name = rule.name.clone();
-        let entry = index == 0;
-        let atomic = match rule.ty {
-            RuleType::Atomic => { true }
-            RuleType::CompoundAtomic => { true }
-            _ => false
+trait FromPest {
+    fn build_ygg(&self,  f: &mut Buffer<PestConverter>) -> std::fmt::Result;
+}
+
+impl<'i> FromPest for OptimizedRule {
+    fn build_ygg(&self, f: &mut Buffer<PestConverter>) -> std::fmt::Result {
+        let atomic = match self.ty {
+            RuleType::Atomic => {
+                f.write_str("atomic ")?
+            }
+            RuleType::CompoundAtomic => {
+                f.write_str("atomic ")?
+            }
+            RuleType::Silent => {
+                f.write_str("ignore ")?
+            }
+            _ => {}
         };
-        let body = self.visit_expr(&rule.expr, atomic);
+        writeln!(f, "class {} {{", self.name.clone())?;
 
-        GrammarRule {
-            name,
-            r#type: "".to_string(),
-            document: "".to_string(),
-            derives: Default::default(),
-            auto_inline: false,
-            auto_boxed: false,
-            entry,
-            union: false,
-            force_export: false,
-            body,
-            range: Default::default(),
-        }
-    }
-    fn visit_expr(&self, expr: &OptimizedExpr, atomic: bool) -> ExpressionNode {
-        match expr {
-            OptimizedExpr::Str(s) => {
-                DataKind::String(s.to_owned()).into()
-            }
-            OptimizedExpr::Insens(_) => { unreachable!() }
-            OptimizedExpr::Range(_, _) => { unreachable!() }
-            OptimizedExpr::Ident(v) => {
-                RuleReference::new(v).to_node("")
-            }
-            OptimizedExpr::PeekSlice(_, _) => { unreachable!() }
-            OptimizedExpr::PosPred(_) => { unreachable!() }
-            OptimizedExpr::NegPred(_) => { unreachable!() }
-            OptimizedExpr::Seq(l, r) => {
-                if atomic {
-                    self.visit_expr(l, atomic) & self.visit_expr(r, atomic)
-                } else {
-                    self.visit_expr(l, atomic) + self.visit_expr(r, atomic)
-                }
-            }
-            OptimizedExpr::Choice(l, r) => {
-                self.visit_expr(l, atomic) | self.visit_expr(r, atomic)
-            }
-            OptimizedExpr::Opt(v) => { self.visit_expr(v, atomic) + Operator::Optional }
-            OptimizedExpr::Rep(v) => {
-                self.visit_expr(v, atomic) + Operator::Repeats
-            }
-            OptimizedExpr::Skip(_) => { unreachable!() }
-            OptimizedExpr::Push(_) => { unreachable!() }
-            OptimizedExpr::RestoreOnErr(_) => { unreachable!() }
-        }
+        f.write_str("}\n")
     }
 }
+
+// impl PestConverter {
+//     fn visit_rule(&self, rule: &OptimizedRule, index: usize) -> GrammarRule {
+//         let name = rule.name.clone();
+//         let entry = index == 0;
+//         let atomic = match rule.ty {
+//             RuleType::Atomic => { true }
+//             RuleType::CompoundAtomic => { true }
+//             _ => false
+//         };
+//         let body = self.visit_expr(&rule.expr, atomic);
+//     }
+//     fn visit_expr(&self, expr: &OptimizedExpr, atomic: bool) -> ExpressionNode {
+//         match expr {
+//             OptimizedExpr::Str(s) => {
+//                 DataKind::String(s.to_owned()).into()
+//             }
+//             OptimizedExpr::Insens(_) => { unreachable!() }
+//             OptimizedExpr::Range(_, _) => { unreachable!() }
+//             OptimizedExpr::Ident(v) => {
+//                 RuleReference::new(v).to_node("")
+//             }
+//             OptimizedExpr::PeekSlice(_, _) => { unreachable!() }
+//             OptimizedExpr::PosPred(_) => { unreachable!() }
+//             OptimizedExpr::NegPred(_) => { unreachable!() }
+//             OptimizedExpr::Seq(l, r) => {
+//                 if atomic {
+//                     self.visit_expr(l, atomic) & self.visit_expr(r, atomic)
+//                 } else {
+//                     self.visit_expr(l, atomic) + self.visit_expr(r, atomic)
+//                 }
+//             }
+//             OptimizedExpr::Choice(l, r) => {
+//                 self.visit_expr(l, atomic) | self.visit_expr(r, atomic)
+//             }
+//             OptimizedExpr::Opt(v) => { self.visit_expr(v, atomic) + Operator::Optional }
+//             OptimizedExpr::Rep(v) => {
+//                 self.visit_expr(v, atomic) + Operator::Repeats
+//             }
+//             OptimizedExpr::Skip(_) => { unreachable!() }
+//             OptimizedExpr::Push(_) => { unreachable!() }
+//             OptimizedExpr::RestoreOnErr(_) => { unreachable!() }
+//         }
+//     }
+// }
 
 // impl FromPest for Rule {
 //     fn build_ygg(&self, f: impl Write, _: bool) -> std::fmt::Result {
