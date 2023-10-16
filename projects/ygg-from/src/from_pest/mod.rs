@@ -83,14 +83,26 @@ impl<'i> FromPest for OptimizedExpr {
                 writeln!(f, "@peek({}, {})", a, b.unwrap_or(i32::MAX))?
             }
             OptimizedExpr::PosPred(a) => {
-                f.write_str("&(")?;
-                a.build_ygg(f)?;
-                f.write_str(")")?;
+                f.write_str("&")?;
+                if a.is_single() {
+                    a.build_ygg(f)?;
+                }
+                else {
+                    f.write_str("(")?;
+                    a.build_ygg(f)?;
+                    f.write_str(")")?;
+                }
             }
             OptimizedExpr::NegPred(a) => {
-                f.write_str("!(")?;
-                a.build_ygg(f)?;
-                f.write_str(")")?;
+                f.write_str("!")?;
+                if a.is_single() {
+                    a.build_ygg(f)?;
+                }
+                else {
+                    f.write_str("(")?;
+                    a.build_ygg(f)?;
+                    f.write_str(")")?;
+                }
             }
             OptimizedExpr::Seq(a, b) => {
                 a.build_ygg(f)?;
@@ -102,19 +114,37 @@ impl<'i> FromPest for OptimizedExpr {
                 b.build_ygg(f)?;
             }
             OptimizedExpr::Opt(a) => {
-                f.write_str("(")?;
-                a.build_ygg(f)?;
-                f.write_str(")?")?;
+                if a.is_single() {
+                    a.build_ygg(f)?;
+                }
+                else {
+                    f.write_str("(")?;
+                    a.build_ygg(f)?;
+                    f.write_str(")")?;
+                }
+                f.write_str("?")?;
             }
             OptimizedExpr::Rep(a) => {
-                f.write_str("(")?;
-                a.build_ygg(f)?;
-                f.write_str(")*")?;
+                if a.is_single() {
+                    a.build_ygg(f)?;
+                }
+                else {
+                    f.write_str("(")?;
+                    a.build_ygg(f)?;
+                    f.write_str(")")?;
+                }
+                f.write_str("*")?;
             }
             OptimizedExpr::RepOnce(a) => {
-                f.write_str("(")?;
-                a.build_ygg(f)?;
-                f.write_str(")+")?;
+                if a.is_single() {
+                    a.build_ygg(f)?;
+                }
+                else {
+                    f.write_str("(")?;
+                    a.build_ygg(f)?;
+                    f.write_str(")")?;
+                }
+                f.write_str("+")?;
             }
             OptimizedExpr::Skip(a) => {
                 f.write_str("@skip(")?;
@@ -133,9 +163,15 @@ impl<'i> FromPest for OptimizedExpr {
             }
             OptimizedExpr::NodeTag(a, b) => {
                 f.write_str(b)?;
-                f.write_str(":(")?;
-                a.build_ygg(f)?;
-                f.write_str(")")?;
+                f.write_str(":")?;
+                if a.is_single() {
+                    a.build_ygg(f)?;
+                }
+                else {
+                    f.write_str("(")?;
+                    a.build_ygg(f)?;
+                    f.write_str(")")?;
+                }
             }
             OptimizedExpr::RestoreOnErr(a) => {
                 f.write_str("@restore(")?;
@@ -144,5 +180,14 @@ impl<'i> FromPest for OptimizedExpr {
             }
         }
         Ok(())
+    }
+
+    fn is_single(&self) -> bool {
+        match self {
+            OptimizedExpr::Seq(_, _) => {false}
+            OptimizedExpr::Choice(_, _) => {false}
+            OptimizedExpr::NodeTag(_, _) => {false}
+            _ => true
+        }
     }
 }

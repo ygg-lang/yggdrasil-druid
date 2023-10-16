@@ -1,0 +1,56 @@
+grammar Semver {
+
+}
+
+class RangeSet {
+    Space* Range (OP_OR Range)* Space*
+}
+token {
+    OP_OR: "||"
+}
+class Range {
+    Hyphen | Simple (","? Space+ Simple)*
+}
+class Hyphen {
+    Partial Space+ "-" Space+ Partial
+}
+class Simple {
+    Primitive | Partial | Tilde | Caret
+}
+class Primitive {
+    PrimitiveOp Space* Partial
+}
+class PrimitiveOp {
+    | "<="
+    | ">="
+    | ">"
+    | "<"
+    | "="
+}
+class Partial {
+    Xr ("." Xr ("." Xr Qualifier
+    ?)?)?}
+class Xr {
+    XrOp | Nr
+}
+class XrOp {
+    "x" | "X" | "*"
+}
+class Nr {
+    "0" | [1-9] [0-9]*}
+class Tilde {
+    "~>" | "~" Space* Partial
+}
+class Caret {
+    "^" Space* Partial
+}
+class Qualifier {
+    "-" | "+" Parts
+}
+class Parts {
+    Part ("." Part)*}
+class Part {
+    Nr | ("-" | [0-9a-zA-Z])+}
+ignore class Space {
+    " " | "\t"
+}

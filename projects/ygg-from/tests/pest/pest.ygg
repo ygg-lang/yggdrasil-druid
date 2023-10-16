@@ -1,13 +1,13 @@
 ignore class GrammarRules {
  Soi
-( GrammarRule
-)+ Eoi
+ GrammarRule
++ Eoi
 }
 class GrammarRule {
  Identifier
  AssignmentOperator
-( Modifier
-)? OpeningBrace
+ Modifier
+? OpeningBrace
  Expression
  ClosingBrace
 }
@@ -56,10 +56,10 @@ class Expression {
  Term
 )*}
 class Term {
-( PrefixOperator
-)* Node
-( PostfixOperator
-)*}
+ PrefixOperator
+* Node
+ PostfixOperator
+*}
 ignore class Node {
  OpeningParen
  Expression
@@ -137,15 +137,15 @@ class RepeatMinMax {
  ClosingBrace
 }
 atomic class Number {
-( [0-9]
-)+}
+ [0-9]
++}
 atomic class Integer {
  Number
  |  "-"
-( "0"
-)* [1-9]
-( Number
-)?}
+ "0"
+* [1-9]
+ Number
+?}
 class Comma {
  ","
 }
@@ -158,14 +158,14 @@ class Push {
 class PeekSlice {
  "PEEK"
  OpeningBrack
-( Integer
-)? RangeOperator
-( Integer
-)? ClosingBrack
+ Integer
+? RangeOperator
+ Integer
+? ClosingBrack
 }
 atomic class Identifier {
-!( "PUSH"
-) "_"
+! "PUSH"
+ "_"
  |  Alpha
 ( "_"
  |  AlphaNum
@@ -227,11 +227,11 @@ atomic class Unicode {
  OpeningBrace
  HexDigit
  HexDigit
-( HexDigit
-)?( HexDigit
-)?( HexDigit
-)?( HexDigit
-)? ClosingBrace
+ HexDigit
+? HexDigit
+? HexDigit
+? HexDigit
+? ClosingBrace
 }
 atomic class HexDigit {
  [0-9]
@@ -259,13 +259,13 @@ ignore class Whitespace {
 ignore class BlockComment {
  "/*"
 ( BlockComment
- | !( "*/"
-) Any
+ | ! "*/"
+ Any
 )* "*/"
 }
 ignore class Comment {
  BlockComment
  |  "//"
-(!( Newline
-) Any
+(! Newline
+ Any
 )*}
