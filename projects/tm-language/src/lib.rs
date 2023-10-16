@@ -4,6 +4,8 @@ use std::collections::BTreeMap;
 pub use errors::{Error, Result};
 use serde::{Deserialize, Serialize};
 
+mod der;
+mod ser;
 
 
 #[derive(Serialize, Deserialize)]
@@ -20,31 +22,24 @@ pub struct TmLanguage {
     pub patterns: Vec<TmPattern>,
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct TmPattern {
-    #[serde(default)]
-    pub name: String,
-    #[serde(default)]
-    pub comment: String,
-    #[serde(default)]
-    pub include: String,
-    #[serde(default)]
-    pub begin: String,
-    #[serde(default)]
-    #[serde(rename = "beginCaptures")]
-    pub begin_captures: BTreeMap<String, TmPattern>,
-    #[serde(default)]
-    pub end: Option<String>,
-    #[serde(default)]
-    #[serde(rename = "endCaptures")]
-    pub end_captures: BTreeMap<String, TmPattern>,
-    #[serde(default)]
-    pub patterns: Vec<TmPattern>,
-    #[serde(default)]
-    #[serde(rename = "match")]
-    pub r#match: String,
-    #[serde(default)]
-    pub captures: BTreeMap<String, TmPattern>,
+pub enum TmPattern {
+    Include {
+        include: String,
+    },
+    Complete {
+        name: String,
+        comment: String,
+        begin: String,
+        begin_captures: TmCaptures,
+        end: String,
+        end_captures: TmCaptures,
+        patterns: Vec<TmPattern>,
+        matches: String,
+        captures: TmCaptures,
+    },
 }
 
-
+#[derive(Default)]
+pub struct TmCaptures {
+    inner: BTreeMap<usize, TmPattern>,
+}
