@@ -7,8 +7,7 @@ use serde::{Deserialize, Serialize};
 mod der;
 mod ser;
 
-
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct TmLanguage {
     #[serde(default)]
     pub information_for_contributors: Vec<String>,
@@ -20,8 +19,11 @@ pub struct TmLanguage {
     pub scope_name: String,
     #[serde(default)]
     pub patterns: Vec<TmPattern>,
+    #[serde(default)]
+    pub repository: BTreeMap<String, TmPattern>,
 }
 
+#[derive(Debug)]
 pub enum TmPattern {
     Include {
         include: String,
@@ -33,13 +35,13 @@ pub enum TmPattern {
         begin_captures: TmCaptures,
         end: String,
         end_captures: TmCaptures,
-        patterns: Vec<TmPattern>,
         matches: String,
         captures: TmCaptures,
+        patterns: Vec<TmPattern>,
     },
 }
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct TmCaptures {
-    inner: BTreeMap<usize, TmPattern>,
+    pub inner: BTreeMap<usize, TmPattern>,
 }

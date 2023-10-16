@@ -48,7 +48,11 @@ impl<'de> Visitor<'de> for TmPatternVisitor {
                 s => println!("K: {:?}", s)
             }
         }
-        Ok(if value.include.is_empty() {
+        Ok(if !value.include.is_empty() {
+            TmPattern::Include {
+                include: value.include,
+            }
+        }  else {
             TmPattern::Complete {
                 name: value.name,
                 comment: value.comment,
@@ -56,13 +60,9 @@ impl<'de> Visitor<'de> for TmPatternVisitor {
                 begin_captures: value.begin_captures,
                 end: value.end,
                 end_captures: value.end_captures,
-                patterns: value.patterns,
                 matches: value.matches,
                 captures: value.captures,
-            }
-        } else {
-            TmPattern::Include {
-                include: value.include,
+                patterns: value.patterns,
             }
         })
     }

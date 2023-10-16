@@ -13,6 +13,8 @@ fn ready() {
 fn test() -> anyhow::Result<()> {
     let rust: TmLanguage = json5::from_str(include_str!("rust.tmLanguage.json"))?;
     let mut file = File::create("tests/rust.ron")?;
-    file.write_all(to_string_pretty(&rust, PrettyConfig::default())?.as_bytes())?;
+    let mut config = PrettyConfig::default();
+    config.struct_names = true;
+    file.write_all(to_string_pretty(&rust, config)?.as_bytes())?;
     Ok(())
 }

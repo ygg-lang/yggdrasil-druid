@@ -1,4 +1,4 @@
-(
+TmLanguage(
     information_for_contributors: [
         "This file has been converted from https://github.com/dustypomerleau/rust-syntax/blob/master/syntaxes/rust.tmLanguage.json",
         "If you want to provide a fix or improvement, please create a pull request against the original repository.",
@@ -8,534 +8,1241 @@
     name: "Rust",
     scopeName: "source.rust",
     patterns: [
-        (
+        TmPattern(
             comment: "boxed slice literal",
             name: "",
-            match: "",
+            begin: "(<)(\\[)",
+            beginCaptures: {
+                1: TmPattern(
+                    name: "punctuation.brackets.angle.rust",
+                ),
+                2: TmPattern(
+                    name: "punctuation.brackets.square.rust",
+                ),
+            },
+            begin: "(<)(\\[)",
+            beginCaptures: {
+                0: TmPattern(
+                    name: "punctuation.brackets.angle.rust",
+                ),
+            },
             patterns: [
-                (
+                TmPattern(
                     include: "#block-comments",
                 ),
-                (
+                TmPattern(
                     include: "#comments",
                 ),
-                (
+                TmPattern(
                     include: "#gtypes",
                 ),
-                (
+                TmPattern(
                     include: "#lvariables",
                 ),
-                (
+                TmPattern(
                     include: "#lifetimes",
                 ),
-                (
+                TmPattern(
                     include: "#punctuation",
                 ),
-                (
+                TmPattern(
                     include: "#types",
                 ),
             ],
-            begin: "(<)(\\[)",
-            beginCaptures: {
-                1: (
-                    comment: "",
-                    name: "punctuation.brackets.angle.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-                2: (
-                    comment: "",
-                    name: "punctuation.brackets.square.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-            },
-            end: ">",
-            endCaptures: {
-                0: (
-                    comment: "",
-                    name: "punctuation.brackets.angle.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-            },
-            captures: {},
         ),
-        (
+        TmPattern(
             comment: "macro type metavariables",
             name: "meta.macro.metavariable.type.rust",
             match: "(\\$)((crate)|([A-Z][A-Za-z0-9_]*))((:)(block|expr|ident|item|lifetime|literal|meta|path?|stmt|tt|ty|vis))?",
+            captures: {
+                1: TmPattern(
+                    name: "keyword.operator.macro.dollar.rust",
+                ),
+                3: TmPattern(
+                    name: "keyword.other.crate.rust",
+                ),
+                4: TmPattern(
+                    name: "entity.name.type.metavariable.rust",
+                ),
+                6: TmPattern(
+                    name: "keyword.operator.key-value.rust",
+                ),
+                7: TmPattern(
+                    name: "variable.other.metavariable.specifier.rust",
+                ),
+            },
             patterns: [
-                (
+                TmPattern(
                     include: "#keywords",
                 ),
             ],
-            begin: "",
-            beginCaptures: {},
-            end: "",
-            endCaptures: {},
-            captures: {
-                1: (
-                    comment: "",
-                    name: "keyword.operator.macro.dollar.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-                3: (
-                    comment: "",
-                    name: "keyword.other.crate.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-                4: (
-                    comment: "",
-                    name: "entity.name.type.metavariable.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-                6: (
-                    comment: "",
-                    name: "keyword.operator.key-value.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-                7: (
-                    comment: "",
-                    name: "variable.other.metavariable.specifier.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-            },
         ),
-        (
+        TmPattern(
             comment: "macro metavariables",
             name: "meta.macro.metavariable.rust",
             match: "(\\$)([a-z][A-Za-z0-9_]*)((:)(block|expr|ident|item|lifetime|literal|meta|path?|stmt|tt|ty|vis))?",
+            captures: {
+                1: TmPattern(
+                    name: "keyword.operator.macro.dollar.rust",
+                ),
+                2: TmPattern(
+                    name: "variable.other.metavariable.name.rust",
+                ),
+                4: TmPattern(
+                    name: "keyword.operator.key-value.rust",
+                ),
+                5: TmPattern(
+                    name: "variable.other.metavariable.specifier.rust",
+                ),
+            },
             patterns: [
-                (
+                TmPattern(
                     include: "#keywords",
                 ),
             ],
-            begin: "",
-            beginCaptures: {},
-            end: "",
-            endCaptures: {},
-            captures: {
-                1: (
-                    comment: "",
-                    name: "keyword.operator.macro.dollar.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-                2: (
-                    comment: "",
-                    name: "variable.other.metavariable.name.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-                4: (
-                    comment: "",
-                    name: "keyword.operator.key-value.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-                5: (
-                    comment: "",
-                    name: "variable.other.metavariable.specifier.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-            },
         ),
-        (
+        TmPattern(
             comment: "macro rules",
             name: "meta.macro.rules.rust",
             match: "\\b(macro_rules!)\\s+(([a-z0-9_]+)|([A-Z][a-z0-9_]*))\\s+(\\{)",
-            patterns: [],
-            begin: "",
-            beginCaptures: {},
-            end: "",
-            endCaptures: {},
             captures: {
-                1: (
-                    comment: "",
+                1: TmPattern(
                     name: "entity.name.function.macro.rules.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
                 ),
-                3: (
-                    comment: "",
+                3: TmPattern(
                     name: "entity.name.function.macro.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
                 ),
-                4: (
-                    comment: "",
+                4: TmPattern(
                     name: "entity.name.type.macro.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
                 ),
-                5: (
-                    comment: "",
+                5: TmPattern(
                     name: "punctuation.brackets.curly.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
                 ),
             },
         ),
-        (
+        TmPattern(
             comment: "attributes",
             name: "meta.attribute.rust",
-            match: "",
+            begin: "(#)(\\!?)(\\[)",
+            beginCaptures: {
+                1: TmPattern(
+                    name: "punctuation.definition.attribute.rust",
+                ),
+                2: TmPattern(
+                    name: "keyword.operator.attribute.inner.rust",
+                ),
+                3: TmPattern(
+                    name: "punctuation.brackets.attribute.rust",
+                ),
+            },
+            begin: "(#)(\\!?)(\\[)",
+            beginCaptures: {
+                0: TmPattern(
+                    name: "punctuation.brackets.attribute.rust",
+                ),
+            },
             patterns: [
-                (
+                TmPattern(
                     include: "#block-comments",
                 ),
-                (
+                TmPattern(
                     include: "#comments",
                 ),
-                (
+                TmPattern(
                     include: "#keywords",
                 ),
-                (
+                TmPattern(
                     include: "#lifetimes",
                 ),
-                (
+                TmPattern(
                     include: "#punctuation",
                 ),
-                (
+                TmPattern(
                     include: "#strings",
                 ),
-                (
+                TmPattern(
                     include: "#gtypes",
                 ),
-                (
+                TmPattern(
                     include: "#types",
                 ),
             ],
-            begin: "(#)(\\!?)(\\[)",
-            beginCaptures: {
-                1: (
-                    comment: "",
-                    name: "punctuation.definition.attribute.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-                2: (
-                    comment: "",
-                    name: "keyword.operator.attribute.inner.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-                3: (
-                    comment: "",
-                    name: "punctuation.brackets.attribute.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-            },
-            end: "\\]",
-            endCaptures: {
-                0: (
-                    comment: "",
-                    name: "punctuation.brackets.attribute.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-            },
-            captures: {},
         ),
-        (
+        TmPattern(
             comment: "modules",
             name: "",
             match: "(mod)\\s+((?:r#(?!crate|[Ss]elf|super))?[a-z][A-Za-z0-9_]*)",
-            patterns: [],
-            begin: "",
-            beginCaptures: {},
-            end: "",
-            endCaptures: {},
             captures: {
-                1: (
-                    comment: "",
+                1: TmPattern(
                     name: "storage.type.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
                 ),
-                2: (
-                    comment: "",
+                2: TmPattern(
                     name: "entity.name.module.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
                 ),
             },
         ),
-        (
+        TmPattern(
             comment: "external crate imports",
             name: "meta.import.rust",
-            match: "",
+            begin: "\\b(extern)\\s+(crate)",
+            beginCaptures: {
+                1: TmPattern(
+                    name: "storage.type.rust",
+                ),
+                2: TmPattern(
+                    name: "keyword.other.crate.rust",
+                ),
+            },
+            begin: "\\b(extern)\\s+(crate)",
+            beginCaptures: {
+                0: TmPattern(
+                    name: "punctuation.semi.rust",
+                ),
+            },
             patterns: [
-                (
+                TmPattern(
                     include: "#block-comments",
                 ),
-                (
+                TmPattern(
                     include: "#comments",
                 ),
-                (
+                TmPattern(
                     include: "#keywords",
                 ),
-                (
+                TmPattern(
                     include: "#punctuation",
                 ),
             ],
-            begin: "\\b(extern)\\s+(crate)",
-            beginCaptures: {
-                1: (
-                    comment: "",
-                    name: "storage.type.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-                2: (
-                    comment: "",
-                    name: "keyword.other.crate.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-            },
-            end: ";",
-            endCaptures: {
-                0: (
-                    comment: "",
-                    name: "punctuation.semi.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-            },
-            captures: {},
         ),
-        (
+        TmPattern(
             comment: "use statements",
             name: "meta.use.rust",
-            match: "",
+            begin: "\\b(use)\\s",
+            beginCaptures: {
+                1: TmPattern(
+                    name: "keyword.other.rust",
+                ),
+            },
+            begin: "\\b(use)\\s",
+            beginCaptures: {
+                0: TmPattern(
+                    name: "punctuation.semi.rust",
+                ),
+            },
             patterns: [
-                (
+                TmPattern(
                     include: "#block-comments",
                 ),
-                (
+                TmPattern(
                     include: "#comments",
                 ),
-                (
+                TmPattern(
                     include: "#keywords",
                 ),
-                (
+                TmPattern(
                     include: "#namespaces",
                 ),
-                (
+                TmPattern(
                     include: "#punctuation",
                 ),
-                (
+                TmPattern(
                     include: "#types",
                 ),
-                (
+                TmPattern(
                     include: "#lvariables",
                 ),
             ],
-            begin: "\\b(use)\\s",
-            beginCaptures: {
-                1: (
-                    comment: "",
-                    name: "keyword.other.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-            },
-            end: ";",
-            endCaptures: {
-                0: (
-                    comment: "",
-                    name: "punctuation.semi.rust",
-                    match: "",
-                    patterns: [],
-                    begin: "",
-                    beginCaptures: {},
-                    end: "",
-                    endCaptures: {},
-                    captures: {},
-                ),
-            },
-            captures: {},
         ),
-        (
+        TmPattern(
             include: "#block-comments",
         ),
-        (
+        TmPattern(
             include: "#comments",
         ),
-        (
+        TmPattern(
             include: "#lvariables",
         ),
-        (
+        TmPattern(
             include: "#constants",
         ),
-        (
+        TmPattern(
             include: "#gtypes",
         ),
-        (
+        TmPattern(
             include: "#functions",
         ),
-        (
+        TmPattern(
             include: "#types",
         ),
-        (
+        TmPattern(
             include: "#keywords",
         ),
-        (
+        TmPattern(
             include: "#lifetimes",
         ),
-        (
+        TmPattern(
             include: "#macros",
         ),
-        (
+        TmPattern(
             include: "#namespaces",
         ),
-        (
+        TmPattern(
             include: "#punctuation",
         ),
-        (
+        TmPattern(
             include: "#strings",
         ),
-        (
+        TmPattern(
             include: "#variables",
         ),
     ],
+    repository: {
+        "block-comments": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "empty block comments",
+                    name: "comment.block.rust",
+                    match: "/\\*\\*/",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "block documentation comments",
+                    name: "comment.block.documentation.rust",
+                    begin: "/\\*\\*",
+                    beginCaptures: {},
+                    begin: "/\\*\\*",
+                    beginCaptures: {},
+                    patterns: [
+                        TmPattern(
+                            include: "#block-comments",
+                        ),
+                    ],
+                ),
+                TmPattern(
+                    comment: "block comments",
+                    name: "comment.block.rust",
+                    begin: "/\\*(?!\\*)",
+                    beginCaptures: {},
+                    begin: "/\\*(?!\\*)",
+                    beginCaptures: {},
+                    patterns: [
+                        TmPattern(
+                            include: "#block-comments",
+                        ),
+                    ],
+                ),
+            ],
+        ),
+        "comments": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "documentation comments",
+                    name: "comment.line.documentation.rust",
+                    match: "^\\s*///.*",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "line comments",
+                    name: "comment.line.double-slash.rust",
+                    match: "\\s*//.*",
+                    captures: {},
+                ),
+            ],
+        ),
+        "constants": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "ALL CAPS constants",
+                    name: "constant.other.caps.rust",
+                    match: "\\b[A-Z]{2}[A-Z0-9_]*\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "constant declarations",
+                    name: "",
+                    match: "\\b(const)\\s+([A-Z][A-Za-z0-9_]*)\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "storage.type.rust",
+                        ),
+                        2: TmPattern(
+                            name: "constant.other.caps.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "decimal integers and floats",
+                    name: "constant.numeric.decimal.rust",
+                    match: "\\b\\d[\\d_]*(\\.?)[\\d_]*(?:(E|e)([+-]?)([\\d_]+))?(f32|f64|i128|i16|i32|i64|i8|isize|u128|u16|u32|u64|u8|usize)?\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "punctuation.separator.dot.decimal.rust",
+                        ),
+                        2: TmPattern(
+                            name: "keyword.operator.exponent.rust",
+                        ),
+                        3: TmPattern(
+                            name: "keyword.operator.exponent.sign.rust",
+                        ),
+                        4: TmPattern(
+                            name: "constant.numeric.decimal.exponent.mantissa.rust",
+                        ),
+                        5: TmPattern(
+                            name: "entity.name.type.numeric.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "hexadecimal integers",
+                    name: "constant.numeric.hex.rust",
+                    match: "\\b0x[\\da-fA-F_]+(i128|i16|i32|i64|i8|isize|u128|u16|u32|u64|u8|usize)?\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "entity.name.type.numeric.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "octal integers",
+                    name: "constant.numeric.oct.rust",
+                    match: "\\b0o[0-7_]+(i128|i16|i32|i64|i8|isize|u128|u16|u32|u64|u8|usize)?\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "entity.name.type.numeric.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "binary integers",
+                    name: "constant.numeric.bin.rust",
+                    match: "\\b0b[01_]+(i128|i16|i32|i64|i8|isize|u128|u16|u32|u64|u8|usize)?\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "entity.name.type.numeric.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "booleans",
+                    name: "constant.language.bool.rust",
+                    match: "\\b(true|false)\\b",
+                    captures: {},
+                ),
+            ],
+        ),
+        "escapes": TmPattern(
+            comment: "escapes: ASCII, byte, Unicode, quote, regex",
+            name: "constant.character.escape.rust",
+            match: "(\\\\)(?:(?:(x[0-7][0-7a-fA-F])|(u(\\{)[\\da-fA-F]{4,6}(\\}))|.))",
+            captures: {
+                1: TmPattern(
+                    name: "constant.character.escape.backslash.rust",
+                ),
+                2: TmPattern(
+                    name: "constant.character.escape.bit.rust",
+                ),
+                3: TmPattern(
+                    name: "constant.character.escape.unicode.rust",
+                ),
+                4: TmPattern(
+                    name: "constant.character.escape.unicode.punctuation.rust",
+                ),
+                5: TmPattern(
+                    name: "constant.character.escape.unicode.punctuation.rust",
+                ),
+            },
+        ),
+        "functions": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "pub as a function",
+                    name: "",
+                    match: "\\b(pub)(\\()",
+                    captures: {
+                        1: TmPattern(
+                            name: "keyword.other.rust",
+                        ),
+                        2: TmPattern(
+                            name: "punctuation.brackets.round.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "function definition",
+                    name: "meta.function.definition.rust",
+                    begin: "\\b(fn)\\s+((?:r#(?!crate|[Ss]elf|super))?[A-Za-z0-9_]+)((\\()|(<))",
+                    beginCaptures: {
+                        1: TmPattern(
+                            name: "keyword.other.fn.rust",
+                        ),
+                        2: TmPattern(
+                            name: "entity.name.function.rust",
+                        ),
+                        4: TmPattern(
+                            name: "punctuation.brackets.round.rust",
+                        ),
+                        5: TmPattern(
+                            name: "punctuation.brackets.angle.rust",
+                        ),
+                    },
+                    begin: "\\b(fn)\\s+((?:r#(?!crate|[Ss]elf|super))?[A-Za-z0-9_]+)((\\()|(<))",
+                    beginCaptures: {
+                        0: TmPattern(
+                            name: "punctuation.brackets.curly.rust",
+                        ),
+                    },
+                    patterns: [
+                        TmPattern(
+                            include: "#block-comments",
+                        ),
+                        TmPattern(
+                            include: "#comments",
+                        ),
+                        TmPattern(
+                            include: "#keywords",
+                        ),
+                        TmPattern(
+                            include: "#lvariables",
+                        ),
+                        TmPattern(
+                            include: "#constants",
+                        ),
+                        TmPattern(
+                            include: "#gtypes",
+                        ),
+                        TmPattern(
+                            include: "#functions",
+                        ),
+                        TmPattern(
+                            include: "#lifetimes",
+                        ),
+                        TmPattern(
+                            include: "#macros",
+                        ),
+                        TmPattern(
+                            include: "#namespaces",
+                        ),
+                        TmPattern(
+                            include: "#punctuation",
+                        ),
+                        TmPattern(
+                            include: "#strings",
+                        ),
+                        TmPattern(
+                            include: "#types",
+                        ),
+                        TmPattern(
+                            include: "#variables",
+                        ),
+                    ],
+                ),
+                TmPattern(
+                    comment: "function/method calls, chaining",
+                    name: "meta.function.call.rust",
+                    begin: "((?:r#(?!crate|[Ss]elf|super))?[A-Za-z0-9_]+)(\\()",
+                    beginCaptures: {
+                        1: TmPattern(
+                            name: "entity.name.function.rust",
+                        ),
+                        2: TmPattern(
+                            name: "punctuation.brackets.round.rust",
+                        ),
+                    },
+                    begin: "((?:r#(?!crate|[Ss]elf|super))?[A-Za-z0-9_]+)(\\()",
+                    beginCaptures: {
+                        0: TmPattern(
+                            name: "punctuation.brackets.round.rust",
+                        ),
+                    },
+                    patterns: [
+                        TmPattern(
+                            include: "#block-comments",
+                        ),
+                        TmPattern(
+                            include: "#comments",
+                        ),
+                        TmPattern(
+                            include: "#keywords",
+                        ),
+                        TmPattern(
+                            include: "#lvariables",
+                        ),
+                        TmPattern(
+                            include: "#constants",
+                        ),
+                        TmPattern(
+                            include: "#gtypes",
+                        ),
+                        TmPattern(
+                            include: "#functions",
+                        ),
+                        TmPattern(
+                            include: "#lifetimes",
+                        ),
+                        TmPattern(
+                            include: "#macros",
+                        ),
+                        TmPattern(
+                            include: "#namespaces",
+                        ),
+                        TmPattern(
+                            include: "#punctuation",
+                        ),
+                        TmPattern(
+                            include: "#strings",
+                        ),
+                        TmPattern(
+                            include: "#types",
+                        ),
+                        TmPattern(
+                            include: "#variables",
+                        ),
+                    ],
+                ),
+                TmPattern(
+                    comment: "function/method calls with turbofish",
+                    name: "meta.function.call.rust",
+                    begin: "((?:r#(?!crate|[Ss]elf|super))?[A-Za-z0-9_]+)(?=::<.*>\\()",
+                    beginCaptures: {
+                        1: TmPattern(
+                            name: "entity.name.function.rust",
+                        ),
+                    },
+                    begin: "((?:r#(?!crate|[Ss]elf|super))?[A-Za-z0-9_]+)(?=::<.*>\\()",
+                    beginCaptures: {
+                        0: TmPattern(
+                            name: "punctuation.brackets.round.rust",
+                        ),
+                    },
+                    patterns: [
+                        TmPattern(
+                            include: "#block-comments",
+                        ),
+                        TmPattern(
+                            include: "#comments",
+                        ),
+                        TmPattern(
+                            include: "#keywords",
+                        ),
+                        TmPattern(
+                            include: "#lvariables",
+                        ),
+                        TmPattern(
+                            include: "#constants",
+                        ),
+                        TmPattern(
+                            include: "#gtypes",
+                        ),
+                        TmPattern(
+                            include: "#functions",
+                        ),
+                        TmPattern(
+                            include: "#lifetimes",
+                        ),
+                        TmPattern(
+                            include: "#macros",
+                        ),
+                        TmPattern(
+                            include: "#namespaces",
+                        ),
+                        TmPattern(
+                            include: "#punctuation",
+                        ),
+                        TmPattern(
+                            include: "#strings",
+                        ),
+                        TmPattern(
+                            include: "#types",
+                        ),
+                        TmPattern(
+                            include: "#variables",
+                        ),
+                    ],
+                ),
+            ],
+        ),
+        "gtypes": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "option types",
+                    name: "entity.name.type.option.rust",
+                    match: "\\b(Some|None)\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "result types",
+                    name: "entity.name.type.result.rust",
+                    match: "\\b(Ok|Err)\\b",
+                    captures: {},
+                ),
+            ],
+        ),
+        "interpolations": TmPattern(
+            comment: "curly brace interpolations",
+            name: "meta.interpolation.rust",
+            match: "({)[^\"{}]*(})",
+            captures: {
+                1: TmPattern(
+                    name: "punctuation.definition.interpolation.rust",
+                ),
+                2: TmPattern(
+                    name: "punctuation.definition.interpolation.rust",
+                ),
+            },
+        ),
+        "keywords": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "control flow keywords",
+                    name: "keyword.control.rust",
+                    match: "\\b(await|break|continue|do|else|for|if|loop|match|return|try|while|yield)\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "storage keywords",
+                    name: "keyword.other.rust storage.type.rust",
+                    match: "\\b(extern|let|macro|mod)\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "const keyword",
+                    name: "storage.modifier.rust",
+                    match: "\\b(const)\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "type keyword",
+                    name: "keyword.declaration.type.rust storage.type.rust",
+                    match: "\\b(type)\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "enum keyword",
+                    name: "keyword.declaration.enum.rust storage.type.rust",
+                    match: "\\b(enum)\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "trait keyword",
+                    name: "keyword.declaration.trait.rust storage.type.rust",
+                    match: "\\b(trait)\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "struct keyword",
+                    name: "keyword.declaration.struct.rust storage.type.rust",
+                    match: "\\b(struct)\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "storage modifiers",
+                    name: "storage.modifier.rust",
+                    match: "\\b(abstract|static)\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "other keywords",
+                    name: "keyword.other.rust",
+                    match: "\\b(as|async|become|box|dyn|move|final|impl|in|override|priv|pub|ref|typeof|union|unsafe|unsized|use|virtual|where)\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "fn",
+                    name: "keyword.other.fn.rust",
+                    match: "\\bfn\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "crate",
+                    name: "keyword.other.crate.rust",
+                    match: "\\bcrate\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "mut",
+                    name: "storage.modifier.mut.rust",
+                    match: "\\bmut\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "logical operators",
+                    name: "keyword.operator.logical.rust",
+                    match: "(\\^|\\||\\|\\||&&|<<|>>|!)(?!=)",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "logical AND, borrow references",
+                    name: "keyword.operator.borrow.and.rust",
+                    match: "&(?![&=])",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "assignment operators",
+                    name: "keyword.operator.assignment.rust",
+                    match: "(\\+=|-=|\\*=|/=|%=|\\^=|&=|\\|=|<<=|>>=)",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "single equal",
+                    name: "keyword.operator.assignment.equal.rust",
+                    match: "(?<![<>])=(?!=|>)",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "comparison operators",
+                    name: "keyword.operator.comparison.rust",
+                    match: "(=(=)?(?!>)|!=|<=|(?<!=)>=)",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "math operators",
+                    name: "keyword.operator.math.rust",
+                    match: "(([+%]|(\\*(?!\\w)))(?!=))|(-(?!>))|(/(?!/))",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "less than, greater than (special case)",
+                    name: "",
+                    match: "(?:\\b|(?:(\\))|(\\])|(\\})))[ \\t]+([<>])[ \\t]+(?:\\b|(?:(\\()|(\\[)|(\\{)))",
+                    captures: {
+                        1: TmPattern(
+                            name: "punctuation.brackets.round.rust",
+                        ),
+                        2: TmPattern(
+                            name: "punctuation.brackets.square.rust",
+                        ),
+                        3: TmPattern(
+                            name: "punctuation.brackets.curly.rust",
+                        ),
+                        4: TmPattern(
+                            name: "keyword.operator.comparison.rust",
+                        ),
+                        5: TmPattern(
+                            name: "punctuation.brackets.round.rust",
+                        ),
+                        6: TmPattern(
+                            name: "punctuation.brackets.square.rust",
+                        ),
+                        7: TmPattern(
+                            name: "punctuation.brackets.curly.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "namespace operator",
+                    name: "keyword.operator.namespace.rust",
+                    match: "::",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "dereference asterisk",
+                    name: "",
+                    match: "(\\*)(?=\\w+)",
+                    captures: {
+                        1: TmPattern(
+                            name: "keyword.operator.dereference.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "subpattern binding",
+                    name: "keyword.operator.subpattern.rust",
+                    match: "@",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "dot access",
+                    name: "keyword.operator.access.dot.rust",
+                    match: "\\.(?!\\.)",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "ranges, range patterns",
+                    name: "keyword.operator.range.rust",
+                    match: "\\.{2}(=|\\.)?",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "colon",
+                    name: "keyword.operator.key-value.rust",
+                    match: ":(?!:)",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "dashrocket, skinny arrow",
+                    name: "keyword.operator.arrow.skinny.rust",
+                    match: "->",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "hashrocket, fat arrow",
+                    name: "keyword.operator.arrow.fat.rust",
+                    match: "=>",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "dollar macros",
+                    name: "keyword.operator.macro.dollar.rust",
+                    match: "\\$",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "question mark operator, questionably sized, macro kleene matcher",
+                    name: "keyword.operator.question.rust",
+                    match: "\\?",
+                    captures: {},
+                ),
+            ],
+        ),
+        "lifetimes": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "named lifetime parameters",
+                    name: "",
+                    match: "([\'])([a-zA-Z_][0-9a-zA-Z_]*)(?![\'])\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "punctuation.definition.lifetime.rust",
+                        ),
+                        2: TmPattern(
+                            name: "entity.name.type.lifetime.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "borrowing references to named lifetimes",
+                    name: "",
+                    match: "(\\&)([\'])([a-zA-Z_][0-9a-zA-Z_]*)(?![\'])\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "keyword.operator.borrow.rust",
+                        ),
+                        2: TmPattern(
+                            name: "punctuation.definition.lifetime.rust",
+                        ),
+                        3: TmPattern(
+                            name: "entity.name.type.lifetime.rust",
+                        ),
+                    },
+                ),
+            ],
+        ),
+        "lvariables": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "self",
+                    name: "variable.language.self.rust",
+                    match: "\\b[Ss]elf\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "super",
+                    name: "variable.language.super.rust",
+                    match: "\\bsuper\\b",
+                    captures: {},
+                ),
+            ],
+        ),
+        "macros": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "macros",
+                    name: "meta.macro.rust",
+                    match: "(([a-z_][A-Za-z0-9_]*!)|([A-Z_][A-Za-z0-9_]*!))",
+                    captures: {
+                        2: TmPattern(
+                            name: "entity.name.function.macro.rust",
+                        ),
+                        3: TmPattern(
+                            name: "entity.name.type.macro.rust",
+                        ),
+                    },
+                ),
+            ],
+        ),
+        "namespaces": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "namespace (non-type, non-function path segment)",
+                    name: "",
+                    match: "(?<![A-Za-z0-9_])([A-Za-z0-9_]+)((?<!super|self)::)",
+                    captures: {
+                        1: TmPattern(
+                            name: "entity.name.namespace.rust",
+                        ),
+                        2: TmPattern(
+                            name: "keyword.operator.namespace.rust",
+                        ),
+                    },
+                ),
+            ],
+        ),
+        "punctuation": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "comma",
+                    name: "punctuation.comma.rust",
+                    match: ",",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "curly braces",
+                    name: "punctuation.brackets.curly.rust",
+                    match: "[{}]",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "parentheses, round brackets",
+                    name: "punctuation.brackets.round.rust",
+                    match: "[()]",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "semicolon",
+                    name: "punctuation.semi.rust",
+                    match: ";",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "square brackets",
+                    name: "punctuation.brackets.square.rust",
+                    match: "[\\[\\]]",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "angle brackets",
+                    name: "punctuation.brackets.angle.rust",
+                    match: "(?<!=)[<>]",
+                    captures: {},
+                ),
+            ],
+        ),
+        "strings": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "double-quoted strings and byte strings",
+                    name: "string.quoted.double.rust",
+                    begin: "(b?)(\")",
+                    beginCaptures: {
+                        1: TmPattern(
+                            name: "string.quoted.byte.raw.rust",
+                        ),
+                        2: TmPattern(
+                            name: "punctuation.definition.string.rust",
+                        ),
+                    },
+                    begin: "(b?)(\")",
+                    beginCaptures: {
+                        0: TmPattern(
+                            name: "punctuation.definition.string.rust",
+                        ),
+                    },
+                    patterns: [
+                        TmPattern(
+                            include: "#escapes",
+                        ),
+                        TmPattern(
+                            include: "#interpolations",
+                        ),
+                    ],
+                ),
+                TmPattern(
+                    comment: "double-quoted raw strings and raw byte strings",
+                    name: "string.quoted.double.rust",
+                    begin: "(b?r)(#*)(\")",
+                    beginCaptures: {
+                        1: TmPattern(
+                            name: "string.quoted.byte.raw.rust",
+                        ),
+                        2: TmPattern(
+                            name: "punctuation.definition.string.raw.rust",
+                        ),
+                        3: TmPattern(
+                            name: "punctuation.definition.string.rust",
+                        ),
+                    },
+                    begin: "(b?r)(#*)(\")",
+                    beginCaptures: {
+                        1: TmPattern(
+                            name: "punctuation.definition.string.rust",
+                        ),
+                        2: TmPattern(
+                            name: "punctuation.definition.string.raw.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "characters and bytes",
+                    name: "string.quoted.single.char.rust",
+                    begin: "(b)?(\')",
+                    beginCaptures: {
+                        1: TmPattern(
+                            name: "string.quoted.byte.raw.rust",
+                        ),
+                        2: TmPattern(
+                            name: "punctuation.definition.char.rust",
+                        ),
+                    },
+                    begin: "(b)?(\')",
+                    beginCaptures: {
+                        0: TmPattern(
+                            name: "punctuation.definition.char.rust",
+                        ),
+                    },
+                    patterns: [
+                        TmPattern(
+                            include: "#escapes",
+                        ),
+                    ],
+                ),
+            ],
+        ),
+        "types": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "numeric types",
+                    name: "",
+                    match: "(?<![A-Za-z])(f32|f64|i128|i16|i32|i64|i8|isize|u128|u16|u32|u64|u8|usize)\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "entity.name.type.numeric.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "parameterized types",
+                    name: "",
+                    begin: "\\b([A-Z][A-Za-z0-9]*)(<)",
+                    beginCaptures: {
+                        1: TmPattern(
+                            name: "entity.name.type.rust",
+                        ),
+                        2: TmPattern(
+                            name: "punctuation.brackets.angle.rust",
+                        ),
+                    },
+                    begin: "\\b([A-Z][A-Za-z0-9]*)(<)",
+                    beginCaptures: {
+                        0: TmPattern(
+                            name: "punctuation.brackets.angle.rust",
+                        ),
+                    },
+                    patterns: [
+                        TmPattern(
+                            include: "#block-comments",
+                        ),
+                        TmPattern(
+                            include: "#comments",
+                        ),
+                        TmPattern(
+                            include: "#keywords",
+                        ),
+                        TmPattern(
+                            include: "#lvariables",
+                        ),
+                        TmPattern(
+                            include: "#lifetimes",
+                        ),
+                        TmPattern(
+                            include: "#punctuation",
+                        ),
+                        TmPattern(
+                            include: "#types",
+                        ),
+                        TmPattern(
+                            include: "#variables",
+                        ),
+                    ],
+                ),
+                TmPattern(
+                    comment: "primitive types",
+                    name: "entity.name.type.primitive.rust",
+                    match: "\\b(bool|char|str)\\b",
+                    captures: {},
+                ),
+                TmPattern(
+                    comment: "trait declarations",
+                    name: "",
+                    match: "\\b(trait)\\s+([A-Z][A-Za-z0-9]*)\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "keyword.declaration.trait.rust storage.type.rust",
+                        ),
+                        2: TmPattern(
+                            name: "entity.name.type.trait.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "struct declarations",
+                    name: "",
+                    match: "\\b(struct)\\s+([A-Z][A-Za-z0-9]*)\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "keyword.declaration.struct.rust storage.type.rust",
+                        ),
+                        2: TmPattern(
+                            name: "entity.name.type.struct.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "enum declarations",
+                    name: "",
+                    match: "\\b(enum)\\s+([A-Z][A-Za-z0-9_]*)\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "keyword.declaration.enum.rust storage.type.rust",
+                        ),
+                        2: TmPattern(
+                            name: "entity.name.type.enum.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "type declarations",
+                    name: "",
+                    match: "\\b(type)\\s+([A-Z][A-Za-z0-9_]*)\\b",
+                    captures: {
+                        1: TmPattern(
+                            name: "keyword.declaration.type.rust storage.type.rust",
+                        ),
+                        2: TmPattern(
+                            name: "entity.name.type.declaration.rust",
+                        ),
+                    },
+                ),
+                TmPattern(
+                    comment: "types",
+                    name: "entity.name.type.rust",
+                    match: "\\b[A-Z][A-Za-z0-9]*\\b(?!!)",
+                    captures: {},
+                ),
+            ],
+        ),
+        "variables": TmPattern(
+            name: "",
+            patterns: [
+                TmPattern(
+                    comment: "variables",
+                    name: "variable.other.rust",
+                    match: "\\b(?<!(?<!\\.)\\.)(?:r#(?!(crate|[Ss]elf|super)))?[a-z0-9_]+\\b",
+                    captures: {},
+                ),
+            ],
+        ),
+    },
 )

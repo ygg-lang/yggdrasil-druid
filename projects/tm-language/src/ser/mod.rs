@@ -16,16 +16,26 @@ impl Serialize for TmPattern {
             TmPattern::Include { include } => {
                 s.serialize_field("include", include)?;
             }
-            TmPattern::Complete { name, comment, begin, begin_captures, end, end_captures, patterns, matches, captures } => {
-                s.serialize_field("comment", comment)?;
+            TmPattern::Complete { name, comment, begin, begin_captures, end, end_captures, matches, captures, patterns } => {
+                if !comment.is_empty() {
+                    s.serialize_field("comment", comment)?;
+                }
                 s.serialize_field("name", name)?;
-                s.serialize_field("match", matches)?;
-                s.serialize_field("patterns", patterns)?;
-                s.serialize_field("begin", begin)?;
-                s.serialize_field("beginCaptures", begin_captures)?;
-                s.serialize_field("end", end)?;
-                s.serialize_field("endCaptures", end_captures)?;
-                s.serialize_field("captures", captures)?;
+                if !begin.is_empty() {
+                    s.serialize_field("begin", begin)?;
+                    s.serialize_field("beginCaptures", begin_captures)?;
+                }
+                if !end.is_empty() {
+                    s.serialize_field("begin", begin)?;
+                    s.serialize_field("beginCaptures", end_captures)?;
+                }
+                if !matches.is_empty() {
+                    s.serialize_field("match", matches)?;
+                    s.serialize_field("captures", captures)?;
+                }
+                if !patterns.is_empty() {
+                    s.serialize_field("patterns", patterns)?;
+                }
             }
         }
         s.end()
