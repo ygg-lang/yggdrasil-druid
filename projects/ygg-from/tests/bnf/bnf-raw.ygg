@@ -1,0 +1,160 @@
+class Syntax {
+ Rule
+  |  Rule Syntax
+}
+class Rule {
+ OptWhitespace "<" RuleName ">" OptWhitespace "::=" OptWhitespace Expression LineEnd
+}
+class OptWhitespace {
+ "" OptWhitespace
+  |  ""
+}
+class Expression {
+ List
+  |  List OptWhitespace "|" OptWhitespace Expression
+}
+class LineEnd {
+ OptWhitespace Eol
+  |  LineEnd LineEnd
+}
+class List {
+ Term
+  |  Term OptWhitespace List
+}
+class Term {
+ Literal
+  |  "<" RuleName ">"
+}
+class Literal {
+ "\"" Text1 "\""
+  |  "'" Text2 "'"
+}
+class Text1 {
+ ""
+  |  Character1 Text1
+}
+class Text2 {
+ ""
+  |  Character2 Text2
+}
+class Character {
+ Letter
+  |  Digit
+  |  Symbol
+}
+class Letter {
+ "A"
+  |  "B"
+  |  "C"
+  |  "D"
+  |  "E"
+  |  "F"
+  |  "G"
+  |  "H"
+  |  "I"
+  |  "J"
+  |  "K"
+  |  "L"
+  |  "M"
+  |  "N"
+  |  "O"
+  |  "P"
+  |  "Q"
+  |  "R"
+  |  "S"
+  |  "T"
+  |  "U"
+  |  "V"
+  |  "W"
+  |  "X"
+  |  "Y"
+  |  "Z"
+  |  "A"
+  |  "B"
+  |  "C"
+  |  "D"
+  |  "E"
+  |  "F"
+  |  "G"
+  |  "H"
+  |  "I"
+  |  "J"
+  |  "K"
+  |  "L"
+  |  "M"
+  |  "N"
+  |  "O"
+  |  "P"
+  |  "Q"
+  |  "R"
+  |  "S"
+  |  "T"
+  |  "U"
+  |  "V"
+  |  "W"
+  |  "X"
+  |  "Y"
+  |  "Z"
+}
+class Digit {
+ "0"
+  |  "1"
+  |  "2"
+  |  "3"
+  |  "4"
+  |  "5"
+  |  "6"
+  |  "7"
+  |  "8"
+  |  "9"
+}
+class Symbol {
+ "|"
+  |  ""
+  |  "!"
+  |  "#"
+  |  "$"
+  |  "%"
+  |  "&"
+  |  "("
+  |  ")"
+  |  "*"
+  |  "+"
+  |  ","
+  |  ""
+  |  "."
+  |  "/"
+  |  ":"
+  |  ";"
+  |  ">"
+  |  "="
+  |  "<"
+  |  "?"
+  |  "@"
+  |  "["
+  |  "\\"
+  |  "]"
+  |  "^"
+  |  ""
+  |  "`"
+  |  "{"
+  |  "}"
+  |  "~"
+}
+class Character1 {
+ Character
+  |  "'"
+}
+class Character2 {
+ Character
+  |  "\""
+}
+class RuleName {
+ Letter
+  |  RuleName RuleChar
+}
+class RuleChar {
+ Letter
+  |  Digit
+  |  ""
+}

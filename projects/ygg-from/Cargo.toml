@@ -1,6 +1,6 @@
 [package]
-name = "yggdrasil-from"
-version = "0.1.0"
+name = "yggdrasil-druid"
+version = "0.0.0"
 authors = ["Aster <192607617@qq.com>"]
 description = "Yggdrasil Grammar Convert from Others"
 repository = "https://github.com/ygg-lang/yggdrasil-druid"

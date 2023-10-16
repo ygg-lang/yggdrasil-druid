@@ -1,0 +1,92 @@
+class Syntax {
+    Rule
+    | Rule Syntax
+}
+class Rule {
+    "<" RuleName ">" OP_DEFINE Expression EOL
+}
+class RuleName {
+    Letter
+    | RuleName RuleChar
+}
+class RuleChar {
+    Letter
+    | Digit
+}
+token {
+    OP_DEFINE: "::="
+}
+
+class Expression {
+    List
+    | List "|" Expression
+}
+class LineEnd {
+    Eol
+    | LineEnd LineEnd
+}
+class List {
+    Term
+    | Term List
+}
+class Term {
+    Literal
+    | "<" RuleName ">"
+}
+class Literal {
+    |"\"" Text1 "\""
+    | "'" Text2 "'"
+}
+class Text1 {
+    [^"]
+}
+class Text2 {
+    [^']
+}
+class Character {
+    | Letter
+    | Digit
+    | Symbol
+}
+class Letter {
+    [a-zA-Z]
+}
+class Digit {
+    [0-9]
+}
+class Symbol {
+    "|"
+    | ""
+    | "!"
+    | "#"
+    | "$"
+    | "%"
+    | "&"
+    | "("
+    | ")"
+    | "*"
+    | "+"
+    | ","
+    | ""
+    | "."
+    | "/"
+    | ":"
+    | ";"
+    | ">"
+    | "="
+    | "<"
+    | "?"
+    | "@"
+    | "["
+    | "\\"
+    | "]"
+    | "^"
+    | ""
+    | "`"
+    | "{"
+    | "}"
+    | "~"
+}
+ignore WhiteSpace {
+    [\p{White_Space}]
+}

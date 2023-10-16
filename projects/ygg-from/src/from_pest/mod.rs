@@ -19,13 +19,21 @@ impl Default for PestConverter {
 }
 
 impl PestConverter {
-    pub fn parse_pest(&self, text: &str) -> anyhow::Result<String> {
-        let (_, rules) = parse_and_optimize(text)?;
+    pub fn convert_pest(&self, text: &str) -> anyhow::Result<String> {
+        let (_, rules) = match parse_and_optimize(text) {
+            Ok(o) => {o}
+            Err(e) => {
+                for e in e {
+                    Err(e)?
+                }
+                unreachable!()
+            }
+        };
         let mut buffer = Buffer::new(self);
         for rule in rules {
             rule.build_ygg(&mut buffer)?;
         }
-     Ok(   buffer.finish())
+        Ok(buffer.finish())
     }
 }
 

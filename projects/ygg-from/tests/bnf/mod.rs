@@ -1,11 +1,10 @@
-use url::Url;
-use yggdrasil_from::BNFConverter;
+
 use super::*;
 
 #[test]
-pub fn test() -> anyhow::Result<()> {
+pub fn test_bnf() -> anyhow::Result<()> {
     let cvt = BNFConverter::default();
-    let out = cvt.convert_bnf(include_str!("bnf.bnf"));
+    let out = cvt.convert_bnf(include_str!("bnf.bnf"))?;
     let path = Path::new("tests/bnf/bnf-raw.ygg").canonicalize()?;
     println!("{}", Url::from_file_path(&path).unwrap());
     let mut file = File::create(&path)?;

@@ -1,6 +1,5 @@
 [package]
-name = "sub_projects"
-publish = false
+name = "tm-language"
 version = "0.0.0"
 authors = ["Aster <192607617@qq.com>"]
 description = "..."
@@ -10,8 +9,12 @@ license = "MPL-2.0"
 edition = "2018"
 
 [dependencies]
+serde = { version = "1.0.189", features = ["derive"] }
+json5 = "0.4.1"
 
 [dev-dependencies]
+anyhow = "1.0.75"
+ron = "0.8.1"
 
 [features]
 default = []
