@@ -1,0 +1,113 @@
+class Dollar {
+    "$"
+}
+class At {
+    "@"
+}
+ignore class Asterisk {
+    "*"
+}
+ignore class Dot {
+    "."
+}
+ignore class DoubleDot {
+    ".."
+}
+ignore class Alpha {
+    [a-zA-Z]
+}
+ignore class Digit {
+    [0-9]
+}
+ignore class SpecialCharaters {
+    | "_"
+    | "-"
+    | "/"
+    | "\\"
+}
+class Ident {
+    (Alpha | Digit | SpecialCharaters)+
+}
+class Number {
+    Digit
+    +}
+class Float {
+    Digit
+    + "."
+    Digit
+    +}
+class Child {
+    Dot
+    Ident
+}
+class AnyChild {
+    Dot
+    Asterisk
+}
+class IndexedChild {
+    "[" Number "]"
+}
+class Slice {
+    "[" Number ":" Number "]"
+}
+class SliceTo {
+    "[:" Number "]"
+}
+class SliceFrom {
+    "[" Number ":]"
+}
+class Equal {
+    "=="
+}
+class Different {
+    "!="
+}
+class Greater {
+    ">"
+}
+class GreaterOrEqual {
+    ">="
+}
+class Lower {
+    "<"
+}
+class LowerOrEqual {
+    "<="
+}
+class Condition {
+    Equal
+    | Different
+    | GreaterOrEqual
+    | Greater
+    | LowerOrEqual
+    | Lower
+}
+class String {
+    (Alpha | Digit | SpecialCharaters | " ")+}
+class Literal {
+    "'"
+    String
+    "'"
+}
+class Array {
+    "[" " "* Float ("," " "* Float)*
+    | Number ("," " "* Number)*
+    | Literal ("," " "* Literal)* " "* "]"
+}
+class SubExpression {
+    Dollar (Child | AnyChild | IndexedChild | Slice | SliceTo | SliceFrom | Filter)*}
+class And {
+    "&&"
+}
+class Or {
+    "||"
+}
+class Filter {
+    "[" "?(" Dollar | At (Child | AnyChild | IndexedChild | Slice | SliceTo | SliceFrom | Filter)* " "
+    * Condition " "* SubExpression | Float | Number | Literal | Array ")"
+    (" "* And | Or " "* "?(" Dollar | At (Child | AnyChild | IndexedChild | Slice
+    | SliceTo | SliceFrom | Filter)* " "* Condition " "* SubExpression | Float | Number | Literal | Array ")")* "]"
+}
+class Expression {
+    Dollar (Child | AnyChild | IndexedChild | Slice | SliceTo | SliceFrom | Filter)*
+}
